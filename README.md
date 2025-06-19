@@ -31,6 +31,7 @@ The `AppLayout` has to be a server component, otherwise it can't read the global
 - `AppProviders` has to be a client component, otherwise the `ThemeProviderContext` inside the `ThemeProvider` won't work. 
 - the `ThemeProvider` manages the theme settings. It persists the `theme` in a cookie calling a server function (`setThemeFn`), updates the `className` of the `html` element, and maintains a local state to keep track of the current theme without reloading the page.
 - the `useTheme()` hook is used to access the `ThemeProviderContext` somewhere in the react three
+- the `ThemeToggle` component shows how to change the theme
 
 ### FOUC (flash of light/dark content)
 

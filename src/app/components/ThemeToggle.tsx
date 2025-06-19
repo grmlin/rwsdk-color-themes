@@ -1,8 +1,8 @@
 "use client";
 
 import { useTheme } from "@/app/hooks/use-theme";
-import { isTheme, Theme } from "@/app/utils/theme";
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { isTheme } from "@/app/utils/theme";
+import { ChangeEvent, useCallback } from "react";
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme();

@@ -19,9 +19,9 @@ Yes, it was made with tailwindcss in mind. If you need more classes, data attrib
 worker (get theme from cookie)  
   ⮑ <Document /> (set class on the html element, calculate the system theme before render)
          ⮑ <AppLayout /> (layout() server component reading the AppContext)
-                ⮑ `<AppProviders />` (client)
-                        ⮑ `<ThemeProvider />` (client)
-                                ⮑ `<ThemeProviderContext />` (client)
+                ⮑ <AppProviders /> (client)
+                        ⮑ <ThemeProvider /> (client)
+                                ⮑ <ThemeProviderContext /> (client)
                                         ⮑ <Page />
 ```
 

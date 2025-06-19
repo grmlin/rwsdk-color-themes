@@ -1,18 +1,23 @@
-import { defineApp, ErrorResponse } from "rwsdk/worker";
-import { route, render, prefix } from "rwsdk/router";
 import { Document } from "@/app/Document";
-import { Home } from "@/app/pages/Home";
 import { setCommonHeaders } from "@/app/headers";
+import { Home } from "@/app/pages/Home";
 import { userRoutes } from "@/app/pages/user/routes";
-import { sessions, setupSessionStore } from "./session/store";
-import { Session } from "./session/durableObject";
+import { isTheme, Theme } from "@/app/utils/theme";
 import { type User, db, setupDb } from "@/db";
 import { env } from "cloudflare:workers";
+import * as cookie from "cookie";
+import { layout, prefix, render, route } from "rwsdk/router";
+import { defineApp, ErrorResponse } from "rwsdk/worker";
+import { Session } from "./session/durableObject";
+import { sessions, setupSessionStore } from "./session/store";
+import { Root } from "@/app/pages/Root";
+import { AppLayout } from "@/app/components/AppLayout";
 export { SessionDurableObject } from "./session/durableObject";
 
 export type AppContext = {
   session: Session | null;
   user: User | null;
+  theme: Theme | null;
 };
 
 export default defineApp([
@@ -45,8 +50,21 @@ export default defineApp([
       });
     }
   },
-  render(Document, [
-    route("/", () => new Response("Hello, World!")),
+  // read the current theme from the theme cookie
+  async ({ ctx, request }) => {
+    let theme;
+    try {
+      const cookies = cookie.parse(request.headers.get("Cookie") ?? "");
+      if (isTheme(cookies.theme)) {
+        theme = cookies.theme;
+      }
+    } catch (error) {
+      console.log("Error parsing cookies:", error);
+    }
+    ctx.theme = isTheme(theme) ? theme : "system";
+  },
+  render(Document, layout(AppLayout, [
+    route("/", [Root]),
     route("/protected", [
       ({ ctx }) => {
         if (!ctx.user) {
@@ -59,5 +77,5 @@ export default defineApp([
       Home,
     ]),
     prefix("/user", userRoutes),
-  ]),
+  ])),
 ]);

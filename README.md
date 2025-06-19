@@ -5,7 +5,7 @@ This example shows how it's possible to set a color theme mode (dark | light | s
 It uses the Standard RedwoodSDK Starter template.
 
 
-## How it works
+## How to use it
 
 The example supports the following color themes: `dark`, `light`, and `system`. The `system` theme adapts to the user's system preference.
 You can set the theme on the root page (`/`) or by editing the cookie manually. 
@@ -14,7 +14,16 @@ The example adds a `dark` class name to the `html` element when the theme is set
 
 Yes, it was made with tailwindcss in mind. If you need more classes, data attributes or whatever, you can easily adapt the code to your needs.
 
- ### Workflow
+## How it works
+```
+worker (get theme from cookie)  
+  ⮑ <Document /> (set class on the html element, calculate the system theme before render)
+         ⮑ <AppLayout /> (layout() server component reading the AppContext)
+                ⮑ `<AppProviders />` (client)
+                        ⮑ `<ThemeProvider />` (client)
+                                ⮑ `<ThemeProviderContext />` (client)
+                                        ⮑ <Page />
+```
 
 - the `worker.tsx` reads the `theme` cookie and adds a `theme` prop to the global context
 - the layout `AppLayout` reads the `theme` variable and passes it to the `AppProviders` component.  
@@ -28,7 +37,7 @@ The `AppLayout` has to be a server component, otherwise it can't read the global
 To support a `system` theme, which adapts to the user's system preference, we need to ensure that the theme is set before the page is rendered. This prevents a flash of unstyled content (FOUC) when the page loads.
 This is only achievable by adding a `<script>` to the `Document` component, which runs before react is hydrated.
 
-If you don't want to use themes, that are calculated dynamically in the client, you can ignore that part.
+If you don't want to use themes calculated dynamically in the client, you can ignore that part.
 
 ## Running the dev server
 Clone this repository and install the dependencies:
